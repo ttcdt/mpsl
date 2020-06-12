@@ -1,0 +1,389 @@
+/* test.mpsl */
+
+/* program written in mpsl
+   (Minimum Profit Scripting Language) */
+
+print("This is a test.");
+
+/* hash */
+days = {
+    "lunes"     => "monday",
+    "martes"    => "tuesday",
+    "miercoles" => "wednesday",
+    "jueves"    => "thursday",
+    "viernes"   => "friday"
+    };
+
+print("English for lunes is", days.lunes);
+print("English for martes is", days['martes']);
+day="miercoles";
+print("English for", day, "is", days[day]);
+
+/* multiple level structure */
+window = {};
+window.ids = {};
+wid = { 'x' => 640, 'y' => 400 };
+window.ids['main'] = wid;
+
+print("x:", window['ids']['main']['x']);
+print("x:", window.ids.main.x);
+
+dump(window);
+
+content = glob("*.*");
+print("Current directory:", join(content, ", "));
+print("Number of files:", size(content));
+
+foreach(a, content)
+{
+    print("Value for a:", a);
+}
+
+a = "hey!";
+if(a == "hey!")
+{
+    local a;
+
+    a = "wow!";
+    print("Value for a:", a);
+}
+print("Value for a:", a);
+
+if(a == "hey!")
+{
+    print("Variable scope is fine");
+}
+else
+{
+    print("Something weird happened to variable 'a'");
+}
+
+math = {};
+
+sub math.sum(a, b) { return(a + b); }
+
+print(math.sum(5, 4));
+
+_sum = math.sum;
+print(_sum(6, 7));
+
+ary = [ 0, 1, 2, 3 ];
+print("size:", size(ary));
+ary[100] = 100;
+print("size:", size(ary));
+
+a = 10;
+b = 20;
+
+/* ternary operator */
+c = a > b && a || b;
+print("c:", c);
+
+c = a < b && a || b;
+print("c:", c);
+
+c = 100;
+c %= 49;
+print("c:", c);
+
+a = sub { print("I'm working for the world go round!"); };
+a();
+
+sum = sub (a, b) { return(a + b); };
+print("sum 5 + 3:", sum(5, 3));
+print("sum 25 + 33:", sum(25, 33));
+
+/* greatest common divisor (Euclid's algorithm) */
+sub gcd(m, n)
+{
+    while (m > 0)
+    {
+        if(n > m)
+        {
+            local t = m;
+            m = n;
+            n = t;
+        }
+
+        m -= n;
+    }
+
+    return(n);
+}
+
+print("gcd(100, 50) ==", gcd(100, 50));
+print("gcd(65536, 16384) ==", gcd(65536, 16384));
+print("gcd(123456, 654321) ==", gcd(123456, 654321));
+
+sub avg(a, b) { a += b; a /= 2; }
+
+print("avg(100, 50) ==", avg(100, 50));
+print("avg(65536, 16384) ==", avg(65536, 16384));
+print("avg(123456, 654321) ==", avg(123456, 654321));
+
+on_exit_subs = [];
+push(on_exit_subs, sub { print("Close files"); } );
+push(on_exit_subs, sub { print("Clean up memory"); } );
+push(on_exit_subs, sub { print("Other stuff"); } );
+
+/* now exiting */
+foreach(f, on_exit_subs) f();
+
+math_ops = [
+    sub (a, b) { print(a, "+", b, ":", a + b); },
+    sub (a, b) { print(a, "-", b, ":", a - b); },
+    sub (a, b) { print(a, "*", b, ":", a * b); },
+    sub (a, b) { print(a, "/", b, ":", a / b); }
+];
+
+foreach(f, math_ops) f(10, 20);
+
+print("cmp('sunday','monday'): ", cmp('sunday','monday'));
+print("cmp('friday','monday'): ", cmp('friday','monday'));
+print("cmp('sunday','sunday'): ", cmp('sunday','sunday'));
+
+l = keys(days);
+print("\nUnsorted:\n", join(l, "\n"));
+
+l = sort(keys(days));
+print("\nSorted:\n", join(l, "\n"));
+
+l = sort(keys(days), sub (a, b) { cmp(a, b); });
+print("\nSorted, with explicit callback function:\n", join(l, "\n"));
+
+l = sort(keys(days), sub (a, b) { cmp(b, a); });
+print("\nReverse-sorted:\n", join(l, "\n"));
+
+l = sort([ 1, 2, 10, 20, 100, 200 ]);
+print("\nASCII-sorted:\n", join(l, "\n"));
+
+l = sort([ 1, 2, 10, 20, 100, 200 ], sub (a, b) { a - b; });
+print("\nNumeric-sorted:\n", join(l, "\n"));
+
+print("\nFile tests:");
+
+f = open("test.txt", "w");
+ls = [ "Strings\n", "to be written\n", "to a file.\n" ];
+
+if(f != NULL)
+{
+    local l;
+
+    foreach(l, ls)
+        write(f, l);
+    close(f);
+}
+else
+    print("Error writing to test.txt");
+
+f = open("test.txt", "r");
+
+if(f != NULL)
+{
+    local l;
+
+    foreach(l, ls)
+    {
+        if(l == read(f))
+            print("Read OK\n");
+        else
+            print("Read failed.\n");
+    }
+
+    close(f);
+}
+else
+    print("Error reading from test.txt");
+
+unlink("test.txt");
+
+sub chop(s) { sregex(s, "/\n$/", NULL); }
+
+eol = "\n";
+sub chop2(s) { sregex(s, "/" + eol + "$/", NULL); }
+
+if(chop("text with eol\n") == "text with eol")
+    print("Sregex works!");
+
+if(chop2("text with eol\n") == "text with eol")
+    print("Sregex works!");
+
+source = "#!/usr/bin/env mpsl\n\n/* I'm a mpsl script\n\tand I *feel* good! */ /* look! */\n\nexit;\n";
+print(source);
+
+/* taken from http://aspn.activestate.com/ASPN/Cookbook/Rx/Recipe/59811 */
+r = "|/\*[^*]*\*+([^/*][^*]*\*+)*/|";
+
+/*sub substr(s, o, l) { local w=splice(s, NULL, o, l); return(w[1]); }*/
+
+v = regex(source, r);
+dump(v);
+/* get last matching coords */
+c = regex();
+
+v = regex(source, r, c[0] + c[1]);
+dump(v);
+/* get last matching coords */
+c = regex();
+
+v = regex(source, r, c[0] + c[1]);
+dump(v);
+
+/* assignations as expressions */
+print("\nAssignations as expressions: cat file");
+if(f = open("config.h", "r"))
+{
+    /* again assignations as expressions */
+    while(v = read(f))
+        print(v);
+
+    close(f);
+}
+
+print("\nAssignations as expressions: looped regex matching");
+c = 0;
+
+while(v = regex(source, r, c))
+{
+    print(v);
+    c = regex();
+    c = c[0] + c[1];
+}
+
+print("Various encodings\n");
+
+foreach(enc, [ "UTF-8", NULL, "ISO-8859-1", "INVALID" ])
+{
+    print("Encoding", enc, ":", encoding(enc));
+}
+
+/*
+ret = load("test2.mpsl");
+print("test2.mpsl returned ", ret, "\n");
+INC = [ "mpsl" ];
+ret = load("test2.mpsl");
+print("test2.mpsl returned ", ret, "\n");
+*/
+
+sub dumper(v, i)
+{
+    local ret = "";
+    local ind = "";
+    local n;
+
+    /* create the indentation string */
+    foreach(n, [ 0 .. i ])
+        ind = ind ~ "  ";
+
+    if(is_exec(v))
+        ret = "sub { 'DUMMY' }";
+    else
+    if (is_hash(v))
+    {
+        local w = [];
+
+        ret = "{\n";
+
+        foreach(n, keys(v))
+            push(w, dumper(n, i + 1) ~ " => " ~ dumper(v[n], i + 1));
+
+        ret = ret ~ join(w, ",\n") ~ "\n" ~ ind ~ "}";
+    }
+    else
+    if (type(v) eq "array")
+    {
+        local w = [];
+
+        ret = "[\n";
+
+        foreach(n, v)
+            push(w, dumper(n, i + 1));
+
+        ret = ret ~ join(w, ",\n") ~ "\n" ~ ind ~ "]";
+    }
+    else
+    if(regex("/^[0-9\.]+$/", v))
+        ret = v;
+    else
+        ret = "'" ~ v ~ "'";
+
+    return(ind ~ ret);
+}
+
+foreach(v, [ "hola", 100, 5 + 4, 4.6, [ 1, 2, 3],
+    { 'a' => 1, 'b' => { 'bb' => 11, 'cc' => 22 } }, sub { 1; } ])
+    print("v =", dumper(v));
+
+print("More regex tests (matching words)");
+
+v = "This 'is' a word, 'other5-w1th_1234' numb3r5\nseveral:'punctuation;marks!!!'s_func(100,23);";
+print("Test phrase:", v);
+
+r = "/\w+/";
+c = 0;
+
+print("Words:");
+while(w = regex(v, r, c))
+{
+    print(w);
+    c = regex();
+    c = c[0] + c[1];
+}
+
+r = "/'[^']*'/";
+c = 0;
+
+print("Quotes:");
+while(w = regex(v, r, c))
+{
+    print(w);
+    c = regex();
+    c = c[0] + c[1];
+}
+
+print("Hexadecimal and octal numbers:");
+
+v = 0xff;
+
+if(v == 255)
+    print("Hexadecimal numbers work!!!");
+else
+    print("Hexadecimal numbers DON'T work!!!");
+
+v = 0177;
+
+if(v == 127)
+    print("Octal numbers work!!!");
+else
+    print("Octal numbers DON'T work!!!");
+
+
+s = "This is a %s and a %d and another %s and a %f";
+dict = { "%s" => "STRING", "%d" => "INTEGER", "%f" => "FLOAT" };
+print(sregex(s, "/%\w/g", sub (a) { dict[a]; } ));
+
+/* eval as compilable code */
+v = eval("1 + 2;");
+print("v is", v, "(must be 3)");
+
+/* eval as an executable value */
+v = eval(sub { 3 + 4; });
+print("v is", v, "(must be 7)");
+
+ERROR = NULL;
+eval("func(");
+print("Error is", ERROR, "(it's ok)");
+
+eval("error('hey!');");
+print("Error is", ERROR, "(it's ok)");
+
+eval("eval(\"error('you!');\");");
+print("Error is", ERROR, "(it's ok)");
+
+local n = 1;
+
+foreach(n, [ 1, 2, 3 ]) {
+    print("Iterator:", n);
+}
+
+print("n should still be 1:", n);

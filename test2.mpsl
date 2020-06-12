@@ -1,0 +1,10 @@
+/* to be included from test.mpsl */
+print("I'm test2.mpsl");
+
+print("The following should generate a warning");
+v = undefined_function();
+
+/* return data to upper level */
+return(6);
+
+print("This code is never executes");
