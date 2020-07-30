@@ -984,6 +984,12 @@ mpdm_t mpsl_compile_file(mpdm_t file, mpdm_t inc)
 }
 
 
+mpdm_t mpsl_resource(mpdm_t file, mpdm_t inc)
+{
+    return inc_fopen(file, inc);
+}
+
+
 /**
  * mpsl_eval - Evaluates MSPL code.
  * @code: A value containing a string of MPSL code, or executable code

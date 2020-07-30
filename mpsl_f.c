@@ -856,6 +856,11 @@ static mpdm_t F_load(F_ARGS)
                                                        l)), NULL, l);
 }
 
+static mpdm_t F_resource(F_ARGS)
+{
+    return mpsl_resource(A0, mpsl_get_symbol(MPDM_S(L"INC"), l));
+}
+
 /**
  * compile - Compiles a string of MSPL source code file.
  * @source: the source code string
@@ -1612,6 +1617,7 @@ static struct {
     { L"load",           F_load },
     { L"compile",        F_compile },
     { L"decompile",      F_decompile },
+    { L"resource",       F_resource },
     { L"error",          F_error },
     { L"eval",           F_eval },
     { L"print",          F_print },

@@ -1,6 +1,13 @@
 MPSL Release Notes
 ==================
 
+2.58
+----
+
+ - Changes:
+    - New function resource(), that returns source code or data from
+      the INC variable.
+
 2.57
 ----
 
