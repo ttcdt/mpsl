@@ -547,6 +547,25 @@ static mpdm_t F_feof(F_ARGS)
 }
 
 /**
+ * flock - Locks a file.
+ * @fd: the file descriptor
+ * @operation: the operation
+ *
+ * Locks a file. The operation can be 1 (shared lock),
+ * 2 (exclusive lock) or 4 (unlock). Closing the file
+ * also unlocks. See the flock() system call man page.
+ * This function does nothing under win32.
+ *
+ * Returns the value from the flock() C function call.
+ * [Input-Output]
+ */
+/** integer = flock(fd, operation); */
+static mpdm_t F_flock(F_ARGS)
+{
+    return MPDM_I(mpdm_flock(A0, IA1));
+}
+
+/**
  * unlink - Deletes a file.
  * @filename: file name to be deleted
  *
@@ -1601,6 +1620,7 @@ static struct {
     { L"fseek",          F_fseek },
     { L"ftell",          F_ftell },
     { L"feof",           F_feof },
+    { L"flock",          F_flock },
     { L"unlink",         F_unlink },
     { L"rename",         F_rename },
     { L"stat",           F_stat },

@@ -1,6 +1,13 @@
 MPSL Release Notes
 ==================
 
+2.59
+----
+
+ - Changes:
+    - New function flock(). Implements UNIX's flock(). Does nothing
+      under win32.
+
 2.58
 ----
 
