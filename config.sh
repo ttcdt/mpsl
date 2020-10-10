@@ -96,7 +96,7 @@ echo "# automatically created by config.sh - do not modify" > makefile.opts
 
 
 # add version
-cat VERSION >> config.h
+echo "#include \"VERSION\"" >> config.h
 
 # add installation prefix
 echo "#define CONFOPT_PREFIX \"$PREFIX\"" >> config.h

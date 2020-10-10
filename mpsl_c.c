@@ -816,53 +816,13 @@ static mpdm_t build_opcodes(void)
 }
 
 
-mpdm_t mpsl_find_in_embedded_tar(mpdm_t fn, const char *tar, const char *tar_e)
-{
-    mpdm_t f, r = NULL;
-    unsigned char *data;
-    size_t z;
-
-    mpdm_ref(fn);
-
-    /* convert to mbs */
-    f = mpdm_ref(MPDM_2MBS(mpdm_string(fn)));
-
-    if ((data = mpdm_read_tar_mem((const char *)f->data, tar, tar_e, &z)) != NULL) {
-        r = MPDM_MBS((char *)data);
-        free(data);
-    }
-
-    mpdm_unref(f);
-    mpdm_unref(fn);
-
-    return r;
-}
-
-
-static mpdm_t find_in_tar_file(const char *fn, mpdm_t fv)
-{
-    mpdm_t r = NULL;
-    FILE *f = mpdm_get_filehandle(fv);
-
-    if (f) {
-        unsigned char *data = NULL;
-        size_t z;
-
-        if ((data = mpdm_read_tar_file(fn, f, &z)) != NULL) {
-            r = MPDM_MBS((char *)data);
-            free(data);
-        }
-    }
-
-    return r;
-}
-
-
 static mpdm_t inc_fopen(mpdm_t filename, mpdm_t inc)
 /* opens filename searching in INC */
 {
     mpdm_t r = NULL;
     int n;
+
+    mpdm_ref(filename);
 
     /* if INC is NULL, try a direct open */
     if (inc == NULL) {
@@ -884,12 +844,8 @@ static mpdm_t inc_fopen(mpdm_t filename, mpdm_t inc)
                 mpdm_t f;
 
                 if ((f = mpdm_open(v, MPDM_S(L"r"))) != NULL) {
-                    v = mpdm_ref(MPDM_2MBS(mpdm_string(filename)));
-    
-                    r = find_in_tar_file((const char *)v->data, f);
+                    r = mpdm_read_arch_file_s(filename, f);
                     mpdm_close(f);
-    
-                    mpdm_unref(v);
                 }
             }
             else {
@@ -898,6 +854,8 @@ static mpdm_t inc_fopen(mpdm_t filename, mpdm_t inc)
             }
         }
     }
+
+    mpdm_unref(filename);
 
     return r;
 }

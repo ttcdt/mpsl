@@ -36,7 +36,6 @@ mpdm_t mpsl_compile(mpdm_t code, mpdm_t src);
 mpdm_t mpsl_compile_file(mpdm_t filename, mpdm_t inc);
 mpdm_t mpsl_resource(mpdm_t file, mpdm_t inc);
 mpdm_t mpsl_eval(mpdm_t code, mpdm_t args, mpdm_t ctxt);
-mpdm_t mpsl_find_in_embedded_tar(mpdm_t fn, const char *tar, const char *tar_e);
 
 mpdm_t mpsl_trap(mpdm_t trap_func);
 

@@ -1,6 +1,12 @@
 MPSL Release Notes
 ==================
 
+2.60
+----
+
+ - Changes:
+    Deleted mpsl_find_in_embedded_tar() (use mpdm_read_arch_mem_s()).
+
 2.59
 ----
 

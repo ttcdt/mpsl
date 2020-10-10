@@ -103,7 +103,7 @@ distcopy: distclean
 	tar cf - * | (cd $(DIST_TARGET) ; tar xf -)
 
 dist: distcopy
-	(cd /tmp ; tar czf - $(PROJ)-$(VERSION)/* ) > $(PROJ)-$(VERSION).tar.gz ; \
+	(cd /tmp ; tar czf - $(PROJ)-$(VERSION)/* ) > $(PROJ).tar.gz ; \
 	rm -rf $(DIST_TARGET)
 
 install: installdoc
@@ -117,5 +117,5 @@ installdoc:
 		[ -f $$f ] && install -m 644 $$f $(DOCDIR)/$$f.$(PROJ) ; \
 	done
 
-Makefile: VERSION makefile.in
+Makefile: makefile.in
 	./config.sh $(CONF_ARGS)
