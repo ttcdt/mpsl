@@ -9,7 +9,7 @@ clean:
 	rm -f $(TARGET) $(LIB) $(OBJS) mpslc *.o tags *.tar.gz *-stress
 
 LIBS:
-	$(MAKE) -C $(MPDM) libmpdm.a
+	$(MAKE) -C $(MPDMi) libmpdm.a
 
 PROJ=mpsl
 
@@ -28,13 +28,13 @@ version:
 .c.o:
 	$(CC) $(CFLAGS) `cat config.cflags` -c $<
 
-y.tab.h: $(MPDM)/mpdm.h mpsl.y
+y.tab.h: $(MPDMi)/mpdm.h mpsl.y
 	$(YACC) -d mpsl.y
 
-y.tab.c: $(MPDM)/mpdm.h mpsl.y
+y.tab.c: $(MPDMi)/mpdm.h mpsl.y
 	$(YACC) -d mpsl.y
 
-lex.yy.c: $(MPDM)/mpdm.h mpsl.l
+lex.yy.c: $(MPDMi)/mpdm.h mpsl.l
 	flex mpsl.l
 
 mpsl_l.o: lex.yy.c y.tab.h
@@ -45,12 +45,12 @@ mpsl_y.o: y.tab.c
 
 dep:
 	gcc `cat config.cflags` -MM *.c | \
-		sed -e 's;$(MPDM)/;$$(MPDM)/;g' > makefile.depend
+		sed -e 's;$(MPDMi)/;$$(MPDMi)/;g' > makefile.depend
 
 $(LIB): $(OBJS)
 	$(AR) rv $(LIB) $(OBJS)
 
-$(TARGET): $(LIB) $(MPDM)/libmpdm.a
+$(TARGET): $(LIB) $(MPDMi)/libmpdm.a
 	$(CC) $(CFLAGS) -L. -lmpsl `cat config.ldflags` -o $@
 
 mpslc: mpslc.in
@@ -59,7 +59,7 @@ mpslc: mpslc.in
 stress-test: mpsl-stress
 	./mpsl-stress
 
-mpsl-stress: mpsl-stress.c $(LIB) $(MPDM)/libmpdm.a
+mpsl-stress: mpsl-stress.c $(LIB) $(MPDMi)/libmpdm.a
 	$(CC) $(CFLAGS) `cat config.cflags` mpsl-stress.c \
 		-L. -lmpsl `cat config.ldflags` -o $@
 

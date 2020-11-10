@@ -125,27 +125,27 @@ fi
 # MPDM
 echo -n "Looking for MPDM... "
 
-for MPDM in ./mpdm/ ../mpdm/ NOTFOUND ; do
-    if [ -d $MPDM ] && [ -f $MPDM/mpdm.h ] ; then
+for MPDMi in ./mpdm/ ../mpdm/ NOTFOUND ; do
+    if [ -d $MPDMi ] && [ -f $MPDMi/mpdm.h ] ; then
         break
     fi
 done
 
-if [ "$MPDM" != "NOTFOUND" ] ; then
-    echo "-I$MPDM" >> config.cflags
-    echo "-L$MPDM -lmpdm" >> config.ldflags
-    echo "OK ($MPDM)"
+if [ "$MPDMi" != "NOTFOUND" ] ; then
+    echo "-I$MPDMi" >> config.cflags
+    echo "-L$MPDMi -lmpdm" >> config.ldflags
+    echo "OK ($MPDMi)"
 else
     echo "No"
     exit 1
 fi
 
 echo
-(cd $MPDM ; ./config.sh $CONF_ARGS)
+(cd $MPDMi ; ./config.sh $CONF_ARGS)
 echo
 
 # import MPDM build configuration
-. $MPDM.build.sh
+. $MPDMi.build.sh
 
 LDFLAGS="$LDFLAGS -lm"
 
@@ -166,11 +166,11 @@ if [ ! -z "$CONFOPT_DEFAULT_COMPILER" ] ; then
     echo "#define CONFOPT_DEFAULT_COMPILER \"$CONFOPT_DEFAULT_COMPILER\"" >> config.h
 fi
 
-cat $MPDM/config.ldflags >> config.ldflags
+cat $MPDMi/config.ldflags >> config.ldflags
 echo "-lm" >> config.ldflags
 
 # if win32, the interpreter is called mpsl.exe
-grep CONFOPT_WIN32 ${MPDM}/config.h >/dev/null && TARGET=${TARGET}.exe
+grep CONFOPT_WIN32 ${MPDMi}/config.h >/dev/null && TARGET=${TARGET}.exe
 
 
 #########################################################
@@ -182,8 +182,8 @@ echo "AR=$AR" >> makefile.opts
 echo "CFLAGS=$CFLAGS" >> makefile.opts
 echo "YACC=$YACC" >> makefile.opts
 
-echo "MPDM=$MPDM" >> makefile.opts
-grep DOCS $MPDM/makefile.opts >> makefile.opts
+echo "MPDMi=$MPDMi" >> makefile.opts
+grep DOCS $MPDMi/makefile.opts >> makefile.opts
 echo "VERSION=$VERSION" >> makefile.opts
 echo "PREFIX=\$(DESTDIR)$PREFIX" >> makefile.opts
 echo "DOCDIR=\$(DESTDIR)$DOCDIR" >> makefile.opts
@@ -201,7 +201,7 @@ echo "AR='$AR'" >> .build.sh
 echo "YACC='$YACC'" >> .build.sh
 echo "CFLAGS='$CFLAGS'" >> .build.sh
 echo "LDFLAGS='$LDFLAGS'" >> .build.sh
-echo "MPDM='$MPDM'" >> .build.sh
+echo "MPDMi='$MPDMi'" >> .build.sh
 
 #########################################################
 
