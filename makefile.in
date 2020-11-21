@@ -6,7 +6,7 @@ build:
 	@./build.sh
 
 clean:
-	rm -f $(TARGET) $(LIB) $(OBJS) mpslc *.o tags *.tar.gz *-stress
+	rm -f $(TARGET) $(LIB) $(OBJS) mpslc *.o tags *.tar.gz *-stress *.a
 
 LIBS:
 	$(MAKE) -C $(MPDMi) libmpdm.a

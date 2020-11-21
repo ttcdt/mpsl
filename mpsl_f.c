@@ -1446,6 +1446,38 @@ static mpdm_t F_connect(F_ARGS)
 
 
 /**
+ * server - Opens a server TCP/IP socket.
+ * @addr: bind address (NULL for any)
+ * @port: port number
+ *
+ * Opens a server TCP/IP socket in the specified @port number.
+ * The @addr can be NULL to bind to all interfaces
+ * or a hostname or IP to bind to a specific one (e.g. localhost).
+ * [Sockets]
+ * [Input-Output]
+ */
+static mpdm_t F_server(F_ARGS)
+{
+    return mpdm_server(A0, A1);
+}
+
+
+/**
+ * accept - Accepts a connection from a server socket.
+ * @sock: the server socket
+ *
+ * Accepts a connection from the @sock server socket, that was created
+ * in a call to @server.
+ * [Sockets]
+ * [Input-Output]
+ */
+static mpdm_t F_accept(F_ARGS)
+{
+    return mpdm_accept(A0);
+}
+
+
+/**
  * new - Creates a new object using another as its base.
  * @c1: class / base object
  * @c2: class / base object
@@ -1667,6 +1699,8 @@ static struct {
     { L"semaphore_post", F_semaphore_post },
     { L"tr",             F_tr },
     { L"connect",        F_connect },
+    { L"server",         F_server },
+    { L"accept",         F_accept },
     { L"new",            F_new },
     { L"fmt",            F_fmt },
     { L"slice",          F_slice },

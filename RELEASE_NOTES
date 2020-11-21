@@ -1,6 +1,14 @@
 MPSL Release Notes
 ==================
 
+2.61
+----
+
+ - Changes:
+    - New function server(addr, port), that creates a socket in listen mode.
+    - New function accept(sock), that accepts a connection from a server socket
+      created by mpdm_server().
+
 2.60
 ----
 
