@@ -1619,6 +1619,12 @@ static mpdm_t F_swap(F_ARGS)
 }
 
 
+static mpdm_t F_md5(F_ARGS)
+{
+    return mpdm_md5(A0);
+}
+
+
 static struct {
     wchar_t *name;
      mpdm_t(*func) (mpdm_t, mpdm_t);
@@ -1725,6 +1731,7 @@ static struct {
     { L"chomp",          F_chomp },
     { L"index",          F_index },
     { L"swap",           F_swap },
+    { L"md5",            F_md5 },
     { NULL,              NULL }
 };
 
